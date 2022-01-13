@@ -8,20 +8,22 @@ const searchBar = document.querySelector('.searchbar');
 const unitsBtn = document.querySelector('.unitsbtn');
 
 
-async function getData(place, units) {
-    await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=b4cb66d12dd3678944954c55ddafe2d8`, {mode: 'cors'})
-    .then(response => response.json())
-    .then(function(data){
-        if(data.cod == "404"){
-            alert("City name not found.")
-        }else{
-            changeDom(data.name, data.main.temp, data.main.humidity, data.wind.speed, data.weather[0].main,unitsBtn.dataset.unit)
-        }
-    })
-    .catch(function(err){
-        console.log(err)
-    })
-}
+async function getData(place, units){
+    const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=b4cb66d12dd3678944954c55ddafe2d8`, {mode: 'cors'});
+    const responseData = await response.json();
+    if (responseData.cod == "404"){
+        alert("City name not found.")
+    };
+    const placeData = {};
+    placeData.name = responseData.name;
+    placeData.temp = responseData.main.temp;
+    placeData.humidity = responseData.main.humidity;
+    placeData.wind = responseData.wind.speed;
+    placeData.weather = responseData.weather[0].main;
+    
+    changeDom(placeData.name, placeData.temp, placeData.humidity, placeData.wind, placeData.weather, unitsBtn.dataset.unit)
+
+};
 
 function changeDom(name, temp, humidity, wind, weather, unit){
     if (unit == "metric"){
@@ -55,7 +57,7 @@ function searchBtnClick(){
     if (searchBar.value == ""){
         alert("Please choose a city name.");
     }else{
-        const currentUnitType = unitsBtn.dataset.unit
+        const currentUnitType = unitsBtn.dataset.unit;
         getData(searchBar.value, currentUnitType);
     };
 }
