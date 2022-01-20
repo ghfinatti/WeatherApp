@@ -9,7 +9,7 @@ const unitsBtn = document.querySelector('.unitsbtn');
 
 
 async function getData(place, units){
-    const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=b4cb66d12dd3678944954c55ddafe2d8`, {mode: 'cors'});
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=b4cb66d12dd3678944954c55ddafe2d8`, {mode: 'cors'});
     if (response.status === 404){
         alert("City name not found.")
     }else{
