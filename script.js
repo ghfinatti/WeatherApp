@@ -10,20 +10,22 @@ const unitsBtn = document.querySelector('.unitsbtn');
 
 async function getData(place, units){
     const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${place}&units=${units}&appid=b4cb66d12dd3678944954c55ddafe2d8`, {mode: 'cors'});
-    const responseData = await response.json();
-    if (responseData.cod == "404"){
+    if (response.status === 404){
         alert("City name not found.")
-    };
-    const placeData = {};
-    placeData.name = responseData.name;
-    placeData.temp = responseData.main.temp;
-    placeData.humidity = responseData.main.humidity;
-    placeData.wind = responseData.wind.speed;
-    placeData.weather = responseData.weather[0].main;
-    
-    changeDom(placeData.name, placeData.temp, placeData.humidity, placeData.wind, placeData.weather, unitsBtn.dataset.unit)
+    }else{
+        const responseData = await response.json();
+        const placeData = {};
+        placeData.name = responseData.name;
+        placeData.temp = responseData.main.temp;
+        placeData.humidity = responseData.main.humidity;
+        placeData.wind = responseData.wind.speed;
+        placeData.weather = responseData.weather[0].main;
+
+        changeDom(placeData.name, placeData.temp, placeData.humidity, placeData.wind, placeData.weather, unitsBtn.dataset.unit)
+    }
 
 };
+
 
 function changeDom(name, temp, humidity, wind, weather, unit){
     if (unit == "metric"){
